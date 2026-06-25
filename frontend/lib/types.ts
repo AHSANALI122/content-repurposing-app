@@ -10,3 +10,31 @@ export interface TokenResponse {
   access_token: string;
   token_type: string;
 }
+
+export type Platform = "twitter" | "linkedin" | "instagram" | "newsletter";
+
+export type Tone = "professional" | "casual" | "witty" | "bold";
+
+export interface RepurposeRequest {
+  source_text: string;
+  title?: string;
+  tone: Tone;
+  platforms: Platform[];
+}
+
+export interface RepurposeOutput {
+  id: number;
+  platform: Platform;
+  content: string;
+  created_at: string;
+}
+
+export interface RepurposeJob {
+  id: number;
+  user_id: number;
+  title: string;
+  source_text: string;
+  tone: Tone;
+  created_at: string;
+  outputs: RepurposeOutput[];
+}

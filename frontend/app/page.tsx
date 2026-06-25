@@ -1,17 +1,24 @@
 "use client";
 
 import { RequireAuth } from "@/components/app/require-auth";
+import { CreateForm } from "@/components/app/create-form";
 
 export default function HomePage() {
   return (
     <RequireAuth>
-      <div className="mx-auto max-w-2xl py-16 text-center">
-        <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl font-bold tracking-tight text-transparent">
-          Write once. Publish everywhere.
-        </h1>
-        <p className="mt-4 text-muted-foreground">
-          You&apos;re signed in. The Create experience lands with Feature 2.
-        </p>
+      <div className="mx-auto max-w-5xl py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Create
+            </span>
+          </h1>
+          <p className="mt-1 text-muted-foreground">
+            Paste your content, choose platforms and a tone, and get
+            platform-native copy in seconds.
+          </p>
+        </div>
+        <CreateForm />
       </div>
     </RequireAuth>
   );
