@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Bot, Link2, Loader2, Sparkles, Type } from "lucide-react";
 import { toast } from "sonner";
 
 import { agentRepurpose, ApiError } from "@/lib/api";
+import { fadeUp } from "@/lib/motion";
 import { DEFAULT_AGENT_PLATFORMS, DEFAULT_TONE, MIN_CHARS } from "@/lib/constants";
 import type { Platform, TraceStep, Tone, RepurposeJob } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -178,9 +180,9 @@ export function AgentForm() {
                 <AgentTrace trace={trace} />
               </div>
             )}
-            <div className="duration-300 animate-in fade-in slide-in-from-bottom-2">
+            <motion.div variants={fadeUp} initial="hidden" animate="show">
               <OutputTabs outputs={job.outputs} />
-            </div>
+            </motion.div>
           </div>
         ) : (
           <EmptyState />

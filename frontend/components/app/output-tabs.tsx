@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
 import { toast } from "sonner";
 
@@ -8,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { PLATFORMS } from "@/lib/constants";
 import type { RepurposeOutput } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { fadeUp } from "@/lib/motion";
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -27,18 +28,31 @@ function CopyButton({ text }: { text: string }) {
   return (
     <Button variant="outline" size="sm" onClick={copy} className="gap-1.5">
       <span className="relative inline-flex h-4 w-4 items-center justify-center">
-        <Copy
-          className={cn(
-            "absolute h-4 w-4 transition-all duration-200",
-            copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
+        <AnimatePresence initial={false}>
+          {copied ? (
+            <motion.span
+              key="check"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inline-flex"
+            >
+              <Check className="h-4 w-4 text-primary" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="copy"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inline-flex"
+            >
+              <Copy className="h-4 w-4" />
+            </motion.span>
           )}
-        />
-        <Check
-          className={cn(
-            "absolute h-4 w-4 text-primary transition-all duration-200",
-            copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          )}
-        />
+        </AnimatePresence>
       </span>
       {copied ? "Copied" : "Copy"}
     </Button>
@@ -67,7 +81,12 @@ export function OutputTabs({ outputs }: { outputs: RepurposeOutput[] }) {
       </TabsList>
       {outputs.map((o) => (
         <TabsContent key={o.platform} value={o.platform}>
-          <div className="rounded-lg border bg-card">
+          <motion.div
+            className="rounded-lg border bg-card"
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+          >
             <div className="flex items-center justify-between border-b px-4 py-2">
               <span className="text-sm font-medium">{label(o.platform)}</span>
               <CopyButton text={o.content} />
@@ -75,7 +94,7 @@ export function OutputTabs({ outputs }: { outputs: RepurposeOutput[] }) {
             <pre className="thin-scrollbar max-h-[460px] overflow-auto whitespace-pre-wrap break-words p-4 font-sans text-sm leading-relaxed">
               {o.content}
             </pre>
-          </div>
+          </motion.div>
         </TabsContent>
       ))}
     </Tabs>

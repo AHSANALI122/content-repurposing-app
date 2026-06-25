@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, History as HistoryIcon, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -12,6 +13,7 @@ import {
 } from "@/lib/api";
 import { TONES } from "@/lib/constants";
 import type { RepurposeJob, RepurposeJobSummary } from "@/lib/types";
+import { fadeUp, staggerContainer } from "@/lib/motion";
 import { formatRelativeDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -95,17 +97,24 @@ export default function HistoryPage() {
         ) : jobs.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="space-y-3">
-            {jobs.map((job) => (
-              <JobCard
-                key={job.id}
-                job={job}
-                opening={openingId === job.id}
-                onOpen={() => openJob(job.id)}
-                onDelete={() => removeJob(job.id)}
-              />
-            ))}
-          </div>
+          <motion.div
+            className="space-y-3"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="show"
+          >
+            <AnimatePresence mode="popLayout">
+              {jobs.map((job) => (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  opening={openingId === job.id}
+                  onOpen={() => openJob(job.id)}
+                  onDelete={() => removeJob(job.id)}
+                />
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
     </RequireAuth>
@@ -124,19 +133,24 @@ function JobCard({
   onDelete: () => void;
 }) {
   return (
-    <Card
-      role="button"
-      tabIndex={0}
-      onClick={onOpen}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onOpen();
-        }
-      }}
-      className="group cursor-pointer transition-colors hover:border-primary/50 duration-300 animate-in fade-in slide-in-from-bottom-1"
+    <motion.div
+      layout
+      variants={fadeUp}
+      exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
     >
-      <CardContent className="flex items-center gap-4 py-4">
+      <Card
+        role="button"
+        tabIndex={0}
+        onClick={onOpen}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onOpen();
+          }
+        }}
+        className="group cursor-pointer transition-colors hover:border-primary/50"
+      >
+        <CardContent className="flex items-center gap-4 py-4">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h3 className="truncate font-medium">{job.title}</h3>
@@ -164,8 +178,9 @@ function JobCard({
         >
           <Trash2 className="h-4 w-4" />
         </Button>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }
 
@@ -177,7 +192,7 @@ function JobDetail({
   onBack: () => void;
 }) {
   return (
-    <div className="duration-300 animate-in fade-in slide-in-from-bottom-2">
+    <motion.div variants={fadeUp} initial="hidden" animate="show">
       <div className="mb-4 flex items-center gap-3">
         <Button variant="outline" size="sm" onClick={onBack} className="gap-1.5">
           <ArrowLeft className="h-4 w-4" />
@@ -191,7 +206,7 @@ function JobDetail({
         </Badge>
       </div>
       <OutputTabs outputs={job.outputs} />
-    </div>
+    </motion.div>
   );
 }
 

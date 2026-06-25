@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Loader2, Sparkles, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { ApiError, repurpose } from "@/lib/api";
+import { fadeUp } from "@/lib/motion";
 import {
   DEFAULT_PLATFORMS,
   DEFAULT_TONE,
@@ -155,9 +157,9 @@ export function CreateForm() {
         {loading ? (
           <OutputSkeleton count={platforms.length || 1} />
         ) : job ? (
-          <div className="duration-300 animate-in fade-in slide-in-from-bottom-2">
+          <motion.div variants={fadeUp} initial="hidden" animate="show">
             <OutputTabs outputs={job.outputs} />
-          </div>
+          </motion.div>
         ) : (
           <EmptyState />
         )}
