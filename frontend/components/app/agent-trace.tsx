@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -9,6 +10,7 @@ import {
 } from "lucide-react";
 
 import type { TraceStep, TraceStepType } from "@/lib/types";
+import { fadeUp, staggerContainer } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const STEP_META: Record<
@@ -25,23 +27,28 @@ export function AgentTrace({ trace }: { trace: TraceStep[] }) {
   if (trace.length === 0) return null;
 
   return (
-    <ol className="space-y-2">
+    // Staggered reveal for an agentic feel (Framer Motion, spec §4 Feature 5).
+    <motion.ol
+      className="space-y-2"
+      variants={staggerContainer}
+      initial="hidden"
+      animate="show"
+    >
       {trace.map((step, i) => {
         const { icon: Icon, className } = STEP_META[step.type];
         return (
-          <li
+          <motion.li
             key={i}
-            // Staggered reveal for an agentic feel (CSS, no extra deps).
-            className="flex items-start gap-3 rounded-lg border bg-card/50 px-3 py-2 duration-300 animate-in fade-in slide-in-from-bottom-1 fill-mode-both"
-            style={{ animationDelay: `${i * 120}ms` }}
+            variants={fadeUp}
+            className="flex items-start gap-3 rounded-lg border bg-card/50 px-3 py-2"
           >
             <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", className)} />
             <span className="text-sm leading-relaxed text-foreground/90">
               {step.detail}
             </span>
-          </li>
+          </motion.li>
         );
       })}
-    </ol>
+    </motion.ol>
   );
 }
