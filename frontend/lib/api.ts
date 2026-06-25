@@ -4,6 +4,8 @@
 // and redirects to /login.
 
 import type {
+  AgentRepurposeRequest,
+  AgentRepurposeResponse,
   RepurposeJob,
   RepurposeRequest,
   TokenResponse,
@@ -122,6 +124,18 @@ export async function repurpose(
   req: RepurposeRequest
 ): Promise<RepurposeJob> {
   return authedFetch<RepurposeJob>("/api/repurpose", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+  });
+}
+
+// --- agent calls --------------------------------------------------------------
+
+export async function agentRepurpose(
+  req: AgentRepurposeRequest
+): Promise<AgentRepurposeResponse> {
+  return authedFetch<AgentRepurposeResponse>("/api/agent/repurpose", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),

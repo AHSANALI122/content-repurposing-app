@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.database import init_db
+from app.routers import agent as agent_router
 from app.routers import auth as auth_router
 from app.routers import content as content_router
 
@@ -35,7 +36,8 @@ app.add_middleware(
 
 app.include_router(auth_router.router)
 app.include_router(content_router.router)
-# Future features wire their routers here: history, agent.
+app.include_router(agent_router.router)
+# Future features wire their routers here: history.
 
 
 @app.exception_handler(Exception)

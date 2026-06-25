@@ -2,9 +2,12 @@
 
 A user has many RepurposeJobs; a job has many RepurposeOutputs (one per platform).
 Children cascade-delete with their parent (handled on the relationship and FK).
-"""
-from __future__ import annotations
 
+NOTE: do NOT add ``from __future__ import annotations`` here. With it, SQLModel
+hands SQLAlchemy the raw annotation string (e.g. ``list['RepurposeOutput']``) for
+relationships, which fails mapper configuration on SQLAlchemy 2.x. Native 3.11
+``X | None`` syntax works without the import.
+"""
 from datetime import datetime, timezone
 from enum import Enum
 
