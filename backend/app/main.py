@@ -51,6 +51,17 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
     )
 
 
+@app.get("/", tags=["health"])
+def root() -> dict[str, str]:
+    """Friendly root so hitting the API base isn't a bare 404."""
+    return {
+        "name": "Echo API",
+        "status": "ok",
+        "docs": "/docs",
+        "health": "/health",
+    }
+
+
 @app.get("/health", tags=["health"])
 def health() -> dict[str, str]:
     return {"status": "ok"}
