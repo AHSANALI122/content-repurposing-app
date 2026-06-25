@@ -68,6 +68,16 @@ class RepurposeJobPublic(BaseModel):
     outputs: list[RepurposeOutputPublic]
 
 
+class RepurposeJobSummary(BaseModel):
+    """Lightweight list item for History — no source_text or full outputs."""
+
+    id: int
+    title: str
+    tone: Tone
+    created_at: datetime
+    platform_count: int
+
+
 # --- Agent repurpose ----------------------------------------------------------
 
 

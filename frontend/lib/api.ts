@@ -7,6 +7,7 @@ import type {
   AgentRepurposeRequest,
   AgentRepurposeResponse,
   RepurposeJob,
+  RepurposeJobSummary,
   RepurposeRequest,
   TokenResponse,
   User,
@@ -88,6 +89,29 @@ export async function authedFetch<T>(
   return (await res.json()) as T;
 }
 
+/** Authenticated request with no response body (e.g. a 204 DELETE). */
+export async function authedFetchNoContent(
+  path: string,
+  init: RequestInit = {}
+): Promise<void> {
+  const token = getToken();
+  const headers = new Headers(init.headers);
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}${path}`, { ...init, headers });
+
+  if (res.status === 401) {
+    clearToken();
+    if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+      window.location.href = "/login";
+    }
+    throw new ApiError(401, "Your session has expired. Please sign in again.");
+  }
+  if (!res.ok) {
+    throw new ApiError(res.status, await parseError(res));
+  }
+}
+
 // --- auth calls ---------------------------------------------------------------
 
 export async function register(
@@ -140,4 +164,18 @@ export async function agentRepurpose(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),
   });
+}
+
+// --- history calls ------------------------------------------------------------
+
+export async function listHistory(): Promise<RepurposeJobSummary[]> {
+  return authedFetch<RepurposeJobSummary[]>("/api/history");
+}
+
+export async function getHistoryJob(id: number): Promise<RepurposeJob> {
+  return authedFetch<RepurposeJob>(`/api/history/${id}`);
+}
+
+export async function deleteHistoryJob(id: number): Promise<void> {
+  return authedFetchNoContent(`/api/history/${id}`, { method: "DELETE" });
 }

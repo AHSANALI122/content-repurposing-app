@@ -13,6 +13,7 @@ from app.database import init_db
 from app.routers import agent as agent_router
 from app.routers import auth as auth_router
 from app.routers import content as content_router
+from app.routers import history as history_router
 
 logger = logging.getLogger("echo")
 
@@ -37,7 +38,7 @@ app.add_middleware(
 app.include_router(auth_router.router)
 app.include_router(content_router.router)
 app.include_router(agent_router.router)
-# Future features wire their routers here: history.
+app.include_router(history_router.router)
 
 
 @app.exception_handler(Exception)

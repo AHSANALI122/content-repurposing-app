@@ -39,6 +39,14 @@ export interface RepurposeJob {
   outputs: RepurposeOutput[];
 }
 
+export interface RepurposeJobSummary {
+  id: number;
+  title: string;
+  tone: Tone;
+  created_at: string;
+  platform_count: number;
+}
+
 // --- Agent repurpose ---------------------------------------------------------
 
 export interface AgentRepurposeRequest {
