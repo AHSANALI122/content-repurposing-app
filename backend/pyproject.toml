@@ -14,6 +14,8 @@ dependencies = [
     "bcrypt>=4.1",
     "python-multipart>=0.0.9",
     "openai>=1.40",
+    "httpx>=0.27",
+    "beautifulsoup4>=4.12",
 ]
 
 # This is an application, not a distributable library — uv should not try to

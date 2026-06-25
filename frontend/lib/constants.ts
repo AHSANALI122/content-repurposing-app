@@ -53,6 +53,9 @@ export const DEFAULT_PLATFORMS: Platform[] = [
   "instagram",
 ];
 
+// Agent mode defaults to a tighter set than Create (per spec).
+export const DEFAULT_AGENT_PLATFORMS: Platform[] = ["twitter", "linkedin"];
+
 export const DEFAULT_TONE: Tone = "professional";
 
 export const MIN_CHARS = 30;

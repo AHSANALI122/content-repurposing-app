@@ -38,3 +38,25 @@ export interface RepurposeJob {
   created_at: string;
   outputs: RepurposeOutput[];
 }
+
+// --- Agent repurpose ---------------------------------------------------------
+
+export interface AgentRepurposeRequest {
+  url?: string;
+  source_text?: string;
+  title?: string;
+  tone: Tone;
+  platforms: Platform[];
+}
+
+export type TraceStepType = "tool" | "note" | "finish" | "error";
+
+export interface TraceStep {
+  type: TraceStepType;
+  detail: string;
+}
+
+export interface AgentRepurposeResponse {
+  job: RepurposeJob;
+  trace: TraceStep[];
+}
