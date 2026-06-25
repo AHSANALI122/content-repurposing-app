@@ -1,18 +1,32 @@
 """SQLModel database tables.
 
-Only the User table exists for Feature 1 (auth). RepurposeJob / RepurposeOutput
-and the Platform / Tone enums arrive with Feature 2 — a user has many jobs
-(cascade delete) at that point.
+A user has many RepurposeJobs; a job has many RepurposeOutputs (one per platform).
+Children cascade-delete with their parent (handled on the relationship and FK).
 """
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from enum import Enum
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 
 def _utcnow() -> datetime:
     return datetime.now(timezone.utc)
+
+
+class Platform(str, Enum):
+    twitter = "twitter"
+    linkedin = "linkedin"
+    instagram = "instagram"
+    newsletter = "newsletter"
+
+
+class Tone(str, Enum):
+    professional = "professional"
+    casual = "casual"
+    witty = "witty"
+    bold = "bold"
 
 
 class User(SQLModel, table=True):
@@ -23,3 +37,31 @@ class User(SQLModel, table=True):
     email: str = Field(unique=True, index=True)
     hashed_password: str
     created_at: datetime = Field(default_factory=_utcnow)
+
+
+class RepurposeJob(SQLModel, table=True):
+    __tablename__ = "repurpose_jobs"
+
+    id: int | None = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="users.id", index=True)
+    title: str = Field(default="Untitled")
+    source_text: str
+    tone: Tone
+    created_at: datetime = Field(default_factory=_utcnow)
+
+    outputs: list["RepurposeOutput"] = Relationship(
+        back_populates="job",
+        sa_relationship_kwargs={"cascade": "all, delete-orphan"},
+    )
+
+
+class RepurposeOutput(SQLModel, table=True):
+    __tablename__ = "repurpose_outputs"
+
+    id: int | None = Field(default=None, primary_key=True)
+    job_id: int = Field(foreign_key="repurpose_jobs.id", index=True)
+    platform: Platform
+    content: str
+    created_at: datetime = Field(default_factory=_utcnow)
+
+    job: RepurposeJob | None = Relationship(back_populates="outputs")

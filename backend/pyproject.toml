@@ -13,6 +13,7 @@ dependencies = [
     "pyjwt>=2.8",
     "bcrypt>=4.1",
     "python-multipart>=0.0.9",
+    "openai>=1.40",
 ]
 
 # This is an application, not a distributable library — uv should not try to

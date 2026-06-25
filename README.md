@@ -45,6 +45,9 @@ Quick import sanity check: `uv run python -c "import app.main"`.
 | `JWT_SECRET`                  | yes      | Secret used to sign JWTs. Use a long random value, e.g. `python -c "import secrets; print(secrets.token_urlsafe(48))"`. |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | no       | Access-token lifetime in minutes (default `1440` = 24h).                    |
 | `FRONTEND_ORIGINS`            | no       | Comma-separated CORS allow-list, e.g. `http://localhost:3000`.              |
+| `LLM_API_KEY`                 | yes      | API key for the LLM provider. Free Gemini key at https://aistudio.google.com/apikey. |
+| `LLM_BASE_URL`                | no       | OpenAI-compatible base URL (default Gemini: `https://generativelanguage.googleapis.com/v1beta/openai/`). |
+| `LLM_MODEL`                   | no       | Model name (default `gemini-2.5-flash`).                                    |
 
 > Tables are auto-created on startup for v1 (switch to Alembic before evolving a live
 > schema). `.env` is gitignored — never commit it.

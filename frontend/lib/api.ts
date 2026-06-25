@@ -3,7 +3,12 @@
 // `authedFetch`, which attaches the bearer token and, on a 401, clears the token
 // and redirects to /login.
 
-import type { TokenResponse, User } from "@/lib/types";
+import type {
+  RepurposeJob,
+  RepurposeRequest,
+  TokenResponse,
+  User,
+} from "@/lib/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const TOKEN_KEY = "echo_token";
@@ -109,4 +114,16 @@ export async function login(
 
 export async function me(): Promise<User> {
   return authedFetch<User>("/api/auth/me");
+}
+
+// --- content calls ------------------------------------------------------------
+
+export async function repurpose(
+  req: RepurposeRequest
+): Promise<RepurposeJob> {
+  return authedFetch<RepurposeJob>("/api/repurpose", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+  });
 }

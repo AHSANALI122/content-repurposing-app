@@ -1,9 +1,4 @@
-"""Application settings, loaded from the environment / `.env`.
-
-The LLM provider settings (LLM_API_KEY / LLM_BASE_URL / LLM_MODEL) intentionally
-live elsewhere and are introduced with Features 2-3; this module only carries what
-the auth feature and app scaffold need.
-"""
+"""Application settings, loaded from the environment / `.env`."""
 from __future__ import annotations
 
 from functools import lru_cache
@@ -23,6 +18,12 @@ class Settings(BaseSettings):
     jwt_secret: str
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24  # 24h
+
+    # LLM — OpenAI SDK pointed at Gemini's OpenAI-compatible endpoint.
+    # Swap provider/model via env only; the client is built in llm_client.py.
+    llm_api_key: str
+    llm_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    llm_model: str = "gemini-2.5-flash"
 
     # CORS — comma-separated list of allowed frontend origins
     frontend_origins: str = ""
