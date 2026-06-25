@@ -1,0 +1,21 @@
+[project]
+name = "echo-backend"
+version = "0.1.0"
+description = "Echo — content repurposing SaaS backend (FastAPI + SQLModel)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.30",
+    "sqlmodel>=0.0.21",
+    "psycopg[binary]>=3.2",
+    "pydantic-settings>=2.3",
+    "email-validator>=2.1",
+    "pyjwt>=2.8",
+    "bcrypt>=4.1",
+    "python-multipart>=0.0.9",
+]
+
+# This is an application, not a distributable library — uv should not try to
+# build/install the project itself, only its dependencies.
+[tool.uv]
+package = false
